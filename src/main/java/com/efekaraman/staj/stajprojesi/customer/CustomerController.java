@@ -2,14 +2,11 @@ package com.efekaraman.staj.stajprojesi.customer;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.EntityModel;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PostConstruct;
 import javax.validation.Valid;
 import java.util.List;
-
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 
 @RestController
 public class CustomerController {
@@ -34,7 +31,7 @@ public class CustomerController {
     }
 
     @PostMapping("/jpa/customers")
-    public ResponseEntity createCustomer(@Valid @RequestBody Customer customer) {
+    public EntityModel<Customer> createCustomer(@Valid @RequestBody Customer customer) {
         return service.createCustomer(customer);
     }
 
