@@ -1,6 +1,8 @@
 package com.efekaraman.staj.stajprojesi.customer;
 
 import com.efekaraman.staj.stajprojesi.exception.CustomerNotFoundException;
+import com.efekaraman.staj.stajprojesi.product.Product;
+import com.efekaraman.staj.stajprojesi.shopping_cart.CartRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
@@ -18,18 +20,27 @@ import java.util.Optional;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
-// controller serviceteki metodu çağırsın, servisteki repositorydekini çağırsın
 @Component
 public class CustomerService {
 
     @Autowired
     private CustomerRepository customerRepository;
 
+    // For testing
+    public void addDefaultCustomers() {
+        // Clear the database
+        for (Customer c : customerRepository.findAll())
+            customerRepository.deleteById(c.getId());
+
+        Customer customer = Customer.builder().name("efe").build();
+        customerRepository.save(customer);
+    }
+
     public List<Customer> retrieveAllCustomers() {
         return customerRepository.findAll();
     }
 
-    public EntityModel<Customer> retrieveCustomer(@PathVariable String id) {
+    public EntityModel<Customer> retrieveCustomer(String id) {
         Optional<Customer> customer = customerRepository.findById(id);
         if (!customer.isPresent())
             throw new CustomerNotFoundException("id-" + id);
@@ -40,7 +51,7 @@ public class CustomerService {
         return model;
     }
 
-    public ResponseEntity createCustomer(@Valid @RequestBody Customer customer) {
+    public ResponseEntity createCustomer(Customer customer) {
         Customer savedCustomer = customerRepository.save(customer);
 
         URI location = ServletUriComponentsBuilder
@@ -51,11 +62,11 @@ public class CustomerService {
         return ResponseEntity.created(location).build();
     }
 
-    public void deleteCustomer(@PathVariable String id) {
+    public void deleteCustomer(String id) {
         customerRepository.deleteById(id);
     }
 
-    public void updateCustomer(@RequestBody Customer customer, @PathVariable String id) {
+    public void updateCustomer(Customer customer, String id) {
         Optional<Customer> c = customerRepository.findById(id);
         if (c.isPresent()) {
             c.get().setName(customer.getName());
@@ -66,12 +77,6 @@ public class CustomerService {
         else {
             throw new CustomerNotFoundException("id-" + id);
         }
-    }
-
-    // For testing
-    public void addOneCustomer() {
-        Customer customer = Customer.builder().name("efe").build();
-        customerRepository.save(customer);
     }
 
 }

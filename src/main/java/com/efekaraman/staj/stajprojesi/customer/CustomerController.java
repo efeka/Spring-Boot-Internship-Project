@@ -1,32 +1,26 @@
 package com.efekaraman.staj.stajprojesi.customer;
 
-import com.efekaraman.staj.stajprojesi.exception.CustomerNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.EntityModel;
-import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.annotation.PostConstruct;
 import javax.validation.Valid;
-import java.net.URI;
-import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
-public class CustomerJPAResource {
+public class CustomerController {
 
     @Autowired
     private CustomerService service;
 
+    // For testing
     @PostConstruct
-    public void addOneCustomer() {
-        service.addOneCustomer();
+    public void addDefaultCustomers() {
+        service.addDefaultCustomers();
     }
 
     @GetMapping("/jpa/customers")
