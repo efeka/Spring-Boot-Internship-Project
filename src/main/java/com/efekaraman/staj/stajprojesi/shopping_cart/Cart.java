@@ -10,7 +10,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
 
 import javax.validation.constraints.NotNull;
 
-@Document("sepet")
+@Document("cart")
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
