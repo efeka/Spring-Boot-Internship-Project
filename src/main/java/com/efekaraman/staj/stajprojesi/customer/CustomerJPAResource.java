@@ -8,8 +8,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.annotation.PostConstruct;
 import javax.validation.Valid;
 import java.net.URI;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,54 +22,36 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 public class CustomerJPAResource {
 
     @Autowired
-    private CustomerRepository customerRepository;
+    private CustomerService service;
+
+    @PostConstruct
+    public void addOneCustomer() {
+        service.addOneCustomer();
+    }
 
     @GetMapping("/jpa/customers")
     public List<Customer> retrieveAllCustomers() {
-        return customerRepository.findAll();
+        return service.retrieveAllCustomers();
     }
 
     @GetMapping("/jpa/customers/{id}")
-    public EntityModel<Customer> retrieveCustomer(@PathVariable int id) {
-        Optional<Customer> customer = customerRepository.findById(id);
-        if (!customer.isPresent())
-            throw new CustomerNotFoundException("id-" + id);
-
-        EntityModel<Customer> model = EntityModel.of(customer.get());
-        WebMvcLinkBuilder linkToUsers = linkTo(methodOn(this.getClass()).retrieveAllCustomers());
-        model.add(linkToUsers.withRel("all-customers"));
-        return model;
+    public EntityModel<Customer> retrieveCustomer(@PathVariable String id) {
+        return service.retrieveCustomer(id);
     }
 
     @PostMapping("/jpa/customers")
     public ResponseEntity createCustomer(@Valid @RequestBody Customer customer) {
-        Customer savedCustomer = customerRepository.save(customer);
-
-        URI location = ServletUriComponentsBuilder
-                .fromCurrentRequest()
-                .path("/{id}")
-                .buildAndExpand(savedCustomer.getId())
-                .toUri();
-        return ResponseEntity.created(location).build();
+        return service.createCustomer(customer);
     }
 
     @DeleteMapping("/jpa/customers/{id}")
-    public void deleteCustomer(@PathVariable int id) {
-        customerRepository.deleteById(id);
+    public void deleteCustomer(@PathVariable String id) {
+        service.deleteCustomer(id);
     }
 
     @PutMapping("/jpa/customers/{id}")
-    public void updateCustomer(@RequestBody Customer customer, @PathVariable int id) {
-        Optional<Customer> c = customerRepository.findById(id);
-        if (c.isPresent()) {
-            c.get().setName(customer.getName());
-            c.get().setBirthDate(customer.getBirthDate());
-            c.get().setEmail(customer.getEmail());
-            customerRepository.save(c.get());
-        }
-        else {
-            throw new CustomerNotFoundException("id-" + id);
-        }
+    public void updateCustomer(@RequestBody Customer customer, @PathVariable String id) {
+        service.updateCustomer(customer, id);
     }
 
 }

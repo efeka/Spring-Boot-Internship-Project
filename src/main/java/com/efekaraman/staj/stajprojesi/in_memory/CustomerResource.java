@@ -1,4 +1,4 @@
-package com.efekaraman.staj.stajprojesi.customer;
+package com.efekaraman.staj.stajprojesi.in_memory;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
@@ -14,9 +14,9 @@ import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
 
-@RestController
+//@RestController
 public class CustomerResource {
-
+    /*
     @Autowired
     private CustomerDaoService service;
 
@@ -66,5 +66,5 @@ public class CustomerResource {
             service.update(customer, id);
         }
     }
-
+    */
 }
