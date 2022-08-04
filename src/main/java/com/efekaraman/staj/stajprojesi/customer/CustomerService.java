@@ -1,19 +1,13 @@
 package com.efekaraman.staj.stajprojesi.customer;
 
 import com.efekaraman.staj.stajprojesi.exception.CustomerNotFoundException;
-import com.efekaraman.staj.stajprojesi.product.Product;
-import com.efekaraman.staj.stajprojesi.shopping_cart.CartRepository;
+import com.efekaraman.staj.stajprojesi.shopping_cart.CartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import javax.validation.Valid;
-import java.net.URI;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,14 +20,22 @@ public class CustomerService {
     @Autowired
     private CustomerRepository customerRepository;
 
+    @Autowired
+    private CartService cartService;
+
     // For testing
     public void addDefaultCustomers() {
         // Clear the database
         for (Customer c : customerRepository.findAll())
             customerRepository.deleteById(c.getId());
+        cartService.deleteCarts();
 
-        Customer customer = Customer.builder().name("efe").build();
-        customerRepository.save(customer);
+        Customer customer1 = Customer.builder().name("Efe").build();
+        Customer customer2 = Customer.builder().name("Abc").birthDate(new Date()).build();
+        Customer customer3 = Customer.builder().name("Def").birthDate(new Date()).email("asd@asd").build();
+        createCustomer(customer1);
+        createCustomer(customer2);
+        createCustomer(customer3);
     }
 
     public List<Customer> retrieveAllCustomers() {
@@ -51,15 +53,10 @@ public class CustomerService {
         return model;
     }
 
-    public ResponseEntity createCustomer(Customer customer) {
-        Customer savedCustomer = customerRepository.save(customer);
-
-        URI location = ServletUriComponentsBuilder
-                .fromCurrentRequest()
-                .path("/{id}")
-                .buildAndExpand(savedCustomer.getId())
-                .toUri();
-        return ResponseEntity.created(location).build();
+    public EntityModel<Customer> createCustomer(Customer customer) {
+        EntityModel<Customer> model = EntityModel.of(customerRepository.save(customer));
+        cartService.createCart(customer.getId());
+        return model;
     }
 
     public void deleteCustomer(String id) {
