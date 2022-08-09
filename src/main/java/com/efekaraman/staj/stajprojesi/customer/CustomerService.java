@@ -45,7 +45,7 @@ public class CustomerService {
     public EntityModel<Customer> retrieveCustomer(String id) {
         Optional<Customer> customer = customerRepository.findById(id);
         if (!customer.isPresent())
-            throw new CustomerNotFoundException("id-" + id);
+            throw new CustomerNotFoundException("id = " + id);
 
         EntityModel<Customer> model = EntityModel.of(customer.get());
         WebMvcLinkBuilder linkToUsers = linkTo(methodOn(this.getClass()).retrieveAllCustomers());
@@ -72,7 +72,7 @@ public class CustomerService {
             customerRepository.save(c.get());
         }
         else {
-            throw new CustomerNotFoundException("id-" + id);
+            throw new CustomerNotFoundException("id = " + id);
         }
     }
 

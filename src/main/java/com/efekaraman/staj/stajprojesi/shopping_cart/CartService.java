@@ -1,9 +1,9 @@
 package com.efekaraman.staj.stajprojesi.shopping_cart;
 
+import com.efekaraman.staj.stajprojesi.exception.CartNotFoundException;
 import com.efekaraman.staj.stajprojesi.product.Product;
 import com.efekaraman.staj.stajprojesi.product.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.EntityModel;
 import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.Optional;
@@ -37,7 +37,7 @@ public class CartService {
         return cartRepository.save(cart);
     }
 
-    public EntityModel<Product> addProduct(String cartId, String productId) {
+    public Product addProduct(String cartId, String productId) {
         Optional<Cart> cart = cartRepository.findById(cartId);
         if (cart.isPresent()) {
             Product product = productService.retrieveProduct(productId);
@@ -45,10 +45,11 @@ public class CartService {
             cart.get().setItemCount(cart.get().getItemCount() + 1);
             cartRepository.save(cart.get());
 
-            EntityModel<Product> model = EntityModel.of(product);
-            return model;
+            return product;
         }
-        return null;
+        else {
+            throw new CartNotFoundException("id = " + cartId);
+        }
     }
 
 }

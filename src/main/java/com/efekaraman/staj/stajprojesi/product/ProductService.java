@@ -1,5 +1,6 @@
 package com.efekaraman.staj.stajprojesi.product;
 
+import com.efekaraman.staj.stajprojesi.exception.ProductNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.stereotype.Component;
@@ -38,7 +39,10 @@ public class ProductService {
 
     public Product retrieveProduct(String id) {
         Optional<Product> product = productRepository.findById(id);
-        return product.get();
+        if (product.isPresent())
+            return product.get();
+        else
+            throw new ProductNotFoundException("id = " + id);
     }
 
 }

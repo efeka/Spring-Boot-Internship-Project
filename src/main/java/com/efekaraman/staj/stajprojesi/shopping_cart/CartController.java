@@ -1,5 +1,6 @@
 package com.efekaraman.staj.stajprojesi.shopping_cart;
 
+import com.efekaraman.staj.stajprojesi.exception.ProductNotFoundException;
 import com.efekaraman.staj.stajprojesi.product.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.EntityModel;
@@ -24,16 +25,16 @@ public class CartController {
         return service.retrieveCarts();
     }
 
-    @GetMapping("/jpa/{customerId}/carts")
-    public Integer saveProductstoCart(@RequestBody List<Product> products, @PathVariable String customerId ) {
+    @PostMapping("/jpa/{customerId}/carts")
+    public Integer saveProductsToCart(@RequestBody List<Product> products, @PathVariable String customerId ) {
         for(Product product : products) {
-            service.addProduct( service.retrieveCustomersCart(customerId).getId(), product.getId());
+            service.addProduct(service.retrieveCustomersCart(customerId).getId(), product.getId());
         }
         return service.retrieveCustomersCart(customerId).getItemCount();
     }
 
-    @GetMapping("/jpa/carts/{cartId}/product/{productId}")
-    public EntityModel<Product> addProduct(@PathVariable String cartId, @PathVariable String productId) {
+    @PostMapping("/jpa/carts/{cartId}/product/{productId}")
+    public Product addProduct(@PathVariable String cartId, @PathVariable String productId) {
         return service.addProduct(cartId, productId);
     }
 
