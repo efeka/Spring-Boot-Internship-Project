@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class ProductService {
@@ -33,6 +34,11 @@ public class ProductService {
 
     public List<Product> retrieveProductByName(String name) {
         return productRepository.findByName(name);
+    }
+
+    public Product retrieveProduct(String id) {
+        Optional<Product> product = productRepository.findById(id);
+        return product.get();
     }
 
 }
