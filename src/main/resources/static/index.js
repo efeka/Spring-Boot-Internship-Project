@@ -3,7 +3,6 @@ function checkControl() {
     let laptop = document.getElementById("laptop");
     let monitor = document.getElementById("monitor");
     let phone = document.getElementById("phone");
-
     let cartItems = document.getElementById("cartItems");
 
     if (laptop.checked == true) {
@@ -55,7 +54,6 @@ function deleteFromCart() {
     let laptop = document.getElementById("laptop");
     let monitor = document.getElementById("monitor");
     let phone = document.getElementById("phone");
-
     let cartItems = document.getElementById("cartItems");
 
     if (laptop.checked == true) {
@@ -104,9 +102,9 @@ function deleteFromCart() {
     }
 
     let innerTemp = cartItems.innerHTML;
-    if (!innerTemp.includes("Laptop") && !innerTemp.includes("Phone") && !innerTemp.includes("Monitor"))
+    if (!innerTemp.includes("Laptop") && !innerTemp.includes("Phone") && !innerTemp.includes("Monitor")) {
         cartItems.innerHTML = "";
-
+    }
 }
 
 /*

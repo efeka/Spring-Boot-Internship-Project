@@ -2,9 +2,7 @@ package com.efekaraman.staj.stajprojesi.product;
 
 import com.efekaraman.staj.stajprojesi.exception.ProductNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.EntityModel;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 import java.util.Optional;
