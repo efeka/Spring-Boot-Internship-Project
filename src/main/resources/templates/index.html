@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <meta charset="UTF-8">
+    <title>Innova Intern</title>
+    <script src="../static/index.js"></script>
+</head>
+<body style =" text-align:center; background-image: linear-gradient(120deg, #d4fc79 0%, #96e6a1 100%);">
+<h1 style="align-content: center;color: blue">Innova Intern Project</h1>
+<h2> Products</h2>
+<hr>
+<div >
+
+    <div style="margin-top:15px;">
+        <input type="checkbox" id="laptop" name="laptop">
+        <label for="laptop">Laptop</label>
+    </div>
+
+    <div>
+        <input type="checkbox" id="phone" name="phone">
+        <label for="phone">Phone</label>
+    </div>
+
+    <div>
+        <input type="checkbox" id="monitor" name="monitor">
+        <label for="monitor">Monitor</label>
+    </div>
+
+
+    <button id="confirmCart" style="margin-top:15px;" onclick="checkControl()" >Add to Cart</button>
+</div>
+
+
+<h2>CART</h2>
+<hr>
+
+<table id="cartItems" style="margin-left:auto; margin-right:auto;"></table>
+
+<button style="margin-top:15px" onclick="sendData()">Confirm the Cart</button>
+<button onclick="resetCart()">Reset</button>
+
+<div id="result"></div>
+
+</body>
+</html>
