@@ -8,6 +8,7 @@ import javax.annotation.PostConstruct;
 import javax.validation.Valid;
 import java.util.List;
 
+@CrossOrigin
 @RestController
 public class CustomerController {
 
