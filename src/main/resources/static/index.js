@@ -1,6 +1,5 @@
 
 function checkControl() {
-
     let laptop = document.getElementById("laptop");
     let monitor = document.getElementById("monitor");
     let phone = document.getElementById("phone");
@@ -8,52 +7,106 @@ function checkControl() {
     let cartItems = document.getElementById("cartItems");
 
     if (laptop.checked == true) {
-
         if(cartItems.innerHTML.includes("Laptop")) {
-
             let index = cartItems.innerHTML.indexOf("Laptop x");
-            let count = parseInt(cartItems.innerHTML.charAt(index+8));
+            let count = parseInt(cartItems.innerHTML.charAt(index + 8));
             count++;
 
-        cartItems.innerHTML = cartItems.innerHTML.replace("Laptop x"+(count-1),"Laptop x"+count); }
-
+            cartItems.innerHTML = cartItems.innerHTML.replace("Laptop x" + (count - 1),"Laptop x" + count);
+        }
         else {
-        cartItems.innerHTML = cartItems.innerHTML + "<td>Laptop x1</td>"}
+            cartItems.innerHTML = cartItems.innerHTML + "<td>Laptop x1</td>"
+        }
     }
 
     if (monitor.checked == true) {
-
         if(cartItems.innerHTML.includes("Monitor")) {
-
             let index = cartItems.innerHTML.indexOf("Monitor x");
-            let count = parseInt(cartItems.innerHTML.charAt(index+9));
+            let count = parseInt(cartItems.innerHTML.charAt(index + 9));
             count++;
 
-            cartItems.innerHTML = cartItems.innerHTML.replace("Monitor x"+(count-1),"Monitor x"+count); }
-
+            cartItems.innerHTML = cartItems.innerHTML.replace("Monitor x" + (count - 1),"Monitor x" + count);
+        }
         else {
-            cartItems.innerHTML = cartItems.innerHTML + "<td style=\"text-align:center\">Monitor x1</td>"}
+            cartItems.innerHTML = cartItems.innerHTML + "<td style=\"text-align:center\">Monitor x1</td>"
+        }
     }
 
     if (phone.checked == true) {
-
         if(cartItems.innerHTML.includes("Phone")) {
-
             let index = cartItems.innerHTML.indexOf("Phone x");
-            let count = parseInt(cartItems.innerHTML.charAt(index+7));
+            let count = parseInt(cartItems.innerHTML.charAt(index + 7));
             count++;
 
-            cartItems.innerHTML = cartItems.innerHTML.replace("Phone x"+(count-1),"Phone x"+count); }
-
+            cartItems.innerHTML = cartItems.innerHTML.replace("Phone x" + (count - 1),"Phone x" + count);
+        }
         else {
-            cartItems.innerHTML = cartItems.innerHTML + "<td>Phone x1</td>"}
+            cartItems.innerHTML = cartItems.innerHTML + "<td>Phone x1</td>"
+        }
     }
-
 }
 
 function  resetCart() {
     let cartItems = document.getElementById("cartItems");
     cartItems.innerHTML = "";
+}
+
+function deleteFromCart() {
+    let laptop = document.getElementById("laptop");
+    let monitor = document.getElementById("monitor");
+    let phone = document.getElementById("phone");
+
+    let cartItems = document.getElementById("cartItems");
+
+    if (laptop.checked == true) {
+        if(cartItems.innerHTML.includes("Laptop")) {
+            let index = cartItems.innerHTML.indexOf("Laptop x");
+            let count = parseInt(cartItems.innerHTML.charAt(index + 8));
+            count--;
+
+            if (count == 0) {
+                cartItems.innerHTML = cartItems.innerHTML.replace("Laptop x" + (count + 1), "");
+            }
+            else {
+                cartItems.innerHTML = cartItems.innerHTML.replace("Laptop x" + (count + 1), "Laptop x" + count);
+            }
+        }
+    }
+
+    if (monitor.checked == true) {
+        if(cartItems.innerHTML.includes("Monitor")) {
+            let index = cartItems.innerHTML.indexOf("Monitor x");
+            let count = parseInt(cartItems.innerHTML.charAt(index + 9));
+            count--;
+
+            if (count == 0) {
+                cartItems.innerHTML = cartItems.innerHTML.replace("Monitor x" + (count + 1), "");
+            }
+            else {
+                cartItems.innerHTML = cartItems.innerHTML.replace("Monitor x" + (count + 1), "Monitor x" + count);
+            }
+        }
+    }
+
+    if (phone.checked == true) {
+        if(cartItems.innerHTML.includes("Phone")) {
+            let index = cartItems.innerHTML.indexOf("Phone x");
+            let count = parseInt(cartItems.innerHTML.charAt(index + 7));
+            count--;
+
+            if (count == 0) {
+                cartItems.innerHTML = cartItems.innerHTML.replace("Phone x" + (count + 1), "");
+            }
+            else {
+                cartItems.innerHTML = cartItems.innerHTML.replace("Phone x" + (count + 1), "Phone x" + count);
+            }
+        }
+    }
+
+    let innerTemp = cartItems.innerHTML;
+    if (!innerTemp.includes("Laptop") && !innerTemp.includes("Phone") && !innerTemp.includes("Monitor"))
+        cartItems.innerHTML = "";
+
 }
 
 /*
