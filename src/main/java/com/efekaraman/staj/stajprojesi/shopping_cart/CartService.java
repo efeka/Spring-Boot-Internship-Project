@@ -1,10 +1,13 @@
 package com.efekaraman.staj.stajprojesi.shopping_cart;
 
 import com.efekaraman.staj.stajprojesi.exception.CartNotFoundException;
+import com.efekaraman.staj.stajprojesi.exception.ProductNotFoundException;
 import com.efekaraman.staj.stajprojesi.product.Product;
 import com.efekaraman.staj.stajprojesi.product.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,24 +35,49 @@ public class CartService {
         return cartRepository.findAll();
     }
 
+    public Cart retrieveCart(String cartId) {
+        Optional<Cart> cart = cartRepository.findById(cartId);
+        if (cart.isPresent())
+            return cart.get();
+        else
+            throw new CartNotFoundException("id = " + cartId);
+    }
+
     public Cart createCart(String customerId) {
-        Cart cart = Cart.builder().customerId(customerId).itemCount(0).build();
+        Cart cart = Cart.builder().customerId(customerId).itemCount(0).productList(new ArrayList()).build();
         return cartRepository.save(cart);
     }
 
-    public Product addProduct(String cartId, String productId) {
+    public Product addProductToCart(String cartId, String productId) {
         Optional<Cart> cart = cartRepository.findById(cartId);
         if (cart.isPresent()) {
             Product product = productService.retrieveProduct(productId);
             cart.get().getProductList().add(product);
-            cart.get().setItemCount(cart.get().getItemCount() + 1);
+            cart.get().setItemCount(cart.get().getProductList().size());
             cartRepository.save(cart.get());
-
             return product;
         }
         else {
             throw new CartNotFoundException("id = " + cartId);
         }
+    }
+
+    public Product deleteProductFromCart(String cartId, String productId) {
+        Optional<Cart> cart = cartRepository.findById(cartId);
+        if (cart.isPresent()) {
+            for (Product p : cart.get().getProductList()) {
+                if (p.getId().equals(productId)) {
+                    cart.get().getProductList().remove(p);
+                    cart.get().setItemCount(cart.get().getProductList().size());
+                    cartRepository.save(cart.get());
+                    return p;
+                }
+            }
+        }
+        else {
+            throw new CartNotFoundException("id = " + cartId);
+        }
+        throw new ProductNotFoundException("id = " + productId);
     }
 
 }

@@ -1,9 +1,7 @@
 package com.efekaraman.staj.stajprojesi.shopping_cart;
 
-import com.efekaraman.staj.stajprojesi.exception.ProductNotFoundException;
 import com.efekaraman.staj.stajprojesi.product.Product;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.EntityModel;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,17 +23,27 @@ public class CartController {
         return service.retrieveCarts();
     }
 
+    @GetMapping("/jpa/carts/{cartId}")
+    public Cart retrieveCart(@PathVariable String cartId) {
+        return service.retrieveCart(cartId);
+    }
+
     @PostMapping("/jpa/{customerId}/carts")
     public Integer saveProductsToCart(@RequestBody List<Product> products, @PathVariable String customerId ) {
         for(Product product : products) {
-            service.addProduct(service.retrieveCustomersCart(customerId).getId(), product.getId());
+            service.addProductToCart(service.retrieveCustomersCart(customerId).getId(), product.getId());
         }
         return service.retrieveCustomersCart(customerId).getItemCount();
     }
 
     @PostMapping("/jpa/carts/{cartId}/product/{productId}")
-    public Product addProduct(@PathVariable String cartId, @PathVariable String productId) {
-        return service.addProduct(cartId, productId);
+    public Product addProductToCart(@PathVariable String cartId, @PathVariable String productId) {
+        return service.addProductToCart(cartId, productId);
+    }
+
+    @DeleteMapping("/jpa/carts/{cartId}/product/{productId}")
+    public Product deleteProductFromCart(@PathVariable String cartId, @PathVariable String productId) {
+        return service.deleteProductFromCart(cartId, productId);
     }
 
 }
