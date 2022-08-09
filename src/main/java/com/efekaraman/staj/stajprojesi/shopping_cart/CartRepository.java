@@ -8,6 +8,6 @@ import java.util.List;
 @Repository
 public interface CartRepository extends MongoRepository<Cart, String> {
 
-    List<Cart> findByCustomerId(String customerId);
+    Cart findByCustomerId(String customerId);
 
 }

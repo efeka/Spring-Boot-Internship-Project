@@ -1,14 +1,21 @@
 package com.efekaraman.staj.stajprojesi.shopping_cart;
 
+import com.efekaraman.staj.stajprojesi.product.Product;
+import com.efekaraman.staj.stajprojesi.product.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.stereotype.Component;
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class CartService {
 
     @Autowired
     private CartRepository cartRepository;
+
+    @Autowired
+    private ProductService productService;
 
     // For testing
     public void deleteCarts() {
@@ -17,7 +24,7 @@ public class CartService {
             cartRepository.deleteById(c.getId());
     }
 
-    public List<Cart> retrieveCustomersCart(String customerId) {
+    public Cart retrieveCustomersCart(String customerId) {
         return cartRepository.findByCustomerId(customerId);
     }
 
@@ -28,6 +35,20 @@ public class CartService {
     public Cart createCart(String customerId) {
         Cart cart = Cart.builder().customerId(customerId).itemCount(0).build();
         return cartRepository.save(cart);
+    }
+
+    public EntityModel<Product> addProduct(String cartId, String productId) {
+        Optional<Cart> cart = cartRepository.findById(cartId);
+        if (cart.isPresent()) {
+            Product product = productService.retrieveProduct(productId);
+            cart.get().getProductList().add(product);
+            cart.get().setItemCount(cart.get().getItemCount() + 1);
+            cartRepository.save(cart.get());
+
+            EntityModel<Product> model = EntityModel.of(product);
+            return model;
+        }
+        return null;
     }
 
 }
